@@ -1,0 +1,759 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mortgage Lane · Policy Hub</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Syne:wght@600;700;800&display=swap');
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #ffffff;
+    --surface: #252b3b;
+    --surface-2: #2d3446;
+    --accent: #00d4a0;
+    --accent-dim: rgba(0,212,160,0.12);
+    --text: #e8eaf0;
+    --text-muted: #8b92a8;
+    --border: rgba(255,255,255,0.07);
+    --page-text: #1a1f2e;
+    --page-text-muted: #5a6072;
+    --page-border: #e4e6ed;
+    --radius: 12px;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Inter', sans-serif;
+    background: var(--bg);
+    color: var(--page-text);
+    min-height: 100vh;
+    line-height: 1.6;
+  }
+
+  /* ── Header ── */
+  header {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: rgba(255,255,255,0.92);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--page-border);
+    padding: 0 40px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 64px;
+  }
+
+  .logo {
+    font-family: 'Syne', sans-serif;
+    font-size: 1.25rem;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    color: var(--page-text);
+  }
+  .logo span { color: var(--accent); }
+
+  .header-badge {
+    font-size: 0.72rem;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--page-text-muted);
+    background: #f0f2f7;
+    border: 1px solid var(--page-border);
+    padding: 4px 12px;
+    border-radius: 20px;
+  }
+
+  /* ── Hero ── */
+  .hero {
+    padding: 72px 40px 56px;
+    max-width: 900px;
+    margin: 0 auto;
+  }
+
+  .hero-eyebrow {
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 16px;
+  }
+
+  .hero h1 {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(2rem, 4vw, 3rem);
+    font-weight: 800;
+    line-height: 1.1;
+    letter-spacing: -0.03em;
+    margin-bottom: 16px;
+    color: var(--page-text);
+  }
+
+  .hero p {
+    color: var(--page-text-muted);
+    font-size: 1rem;
+    max-width: 540px;
+  }
+
+  /* ── Tab nav ── */
+  .tab-nav {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 0 40px;
+    display: flex;
+    gap: 8px;
+    border-bottom: 1px solid var(--page-border);
+    margin-bottom: 48px;
+  }
+
+  .tab-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-family: 'Inter', sans-serif;
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--page-text-muted);
+    padding: 12px 20px;
+    border-bottom: 2px solid transparent;
+    margin-bottom: -1px;
+    transition: color 0.2s, border-color 0.2s;
+  }
+  .tab-btn:hover { color: var(--page-text); }
+  .tab-btn.active {
+    color: var(--accent);
+    border-bottom-color: var(--accent);
+  }
+
+  /* ── Content ── */
+  .content-area {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 0 40px 80px;
+  }
+
+  .policy-panel { display: none; }
+  .policy-panel.active { display: block; }
+
+  /* ── Policy header card ── */
+  .policy-header {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 32px 36px;
+    margin-bottom: 32px;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 24px;
+  }
+
+  .policy-header h2 {
+    font-family: 'Syne', sans-serif;
+    font-size: 1.5rem;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    margin-bottom: 8px;
+    color: var(--text);
+  }
+
+  .policy-header p {
+    color: var(--text-muted);
+    font-size: 0.875rem;
+    max-width: 480px;
+  }
+
+  .policy-meta {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 8px;
+    flex-shrink: 0;
+  }
+
+  .meta-tag {
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 4px 10px;
+    border-radius: 6px;
+  }
+  .meta-tag.it { background: rgba(99,130,255,0.15); color: #8fa4ff; }
+  .meta-tag.security { background: var(--accent-dim); color: var(--accent); }
+  .meta-tag.date { background: var(--surface-2); color: var(--text-muted); font-size: 0.7rem; }
+
+  /* ── Section cards ── */
+  .section-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    margin-bottom: 16px;
+    overflow: hidden;
+  }
+
+  .section-title {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 20px 28px;
+    cursor: pointer;
+    user-select: none;
+  }
+
+  .step-num {
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    background: var(--accent-dim);
+    border: 1px solid rgba(0,212,160,0.25);
+    color: var(--accent);
+    font-size: 0.8rem;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  .section-title h3 {
+    font-size: 0.95rem;
+    font-weight: 600;
+    flex: 1;
+    color: var(--text);
+  }
+
+  .chevron {
+    color: var(--text-muted);
+    transition: transform 0.25s;
+    font-size: 0.9rem;
+  }
+  .section-card.open .chevron { transform: rotate(180deg); }
+
+  .section-body {
+    display: none;
+    padding: 0 28px 24px;
+    border-top: 1px solid var(--border);
+  }
+  .section-card.open .section-body { display: block; }
+
+  .section-body p {
+    color: var(--text-muted);
+    font-size: 0.875rem;
+    margin-top: 16px;
+    margin-bottom: 12px;
+  }
+
+  .step-list {
+    list-style: none;
+    counter-reset: step;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 16px;
+  }
+
+  .step-list li {
+    counter-increment: step;
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+    font-size: 0.875rem;
+    color: var(--text);
+  }
+
+  .step-list li::before {
+    content: counter(step);
+    flex-shrink: 0;
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+    color: var(--accent);
+    font-size: 0.7rem;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 1px;
+  }
+
+  /* ── Comparison table ── */
+  .compare-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 16px;
+    font-size: 0.82rem;
+  }
+
+  .compare-table th {
+    text-align: left;
+    padding: 10px 14px;
+    font-weight: 600;
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--text-muted);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .compare-table td {
+    padding: 12px 14px;
+    border-bottom: 1px solid var(--border);
+    color: var(--text);
+    vertical-align: middle;
+  }
+
+  .compare-table tr:last-child td { border-bottom: none; }
+
+  .badge-best {
+    background: var(--accent-dim);
+    color: var(--accent);
+    border: 1px solid rgba(0,212,160,0.25);
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-size: 0.72rem;
+    font-weight: 600;
+  }
+
+  .badge-weaker {
+    background: rgba(255,160,80,0.12);
+    color: #ffb066;
+    border: 1px solid rgba(255,160,80,0.25);
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-size: 0.72rem;
+    font-weight: 600;
+  }
+
+  /* ── Tip box ── */
+  .tip-box {
+    background: var(--surface-2);
+    border-left: 3px solid var(--accent);
+    border-radius: 0 8px 8px 0;
+    padding: 14px 18px;
+    margin-top: 12px;
+    font-size: 0.82rem;
+    color: var(--text-muted);
+  }
+  .tip-box strong { color: var(--text); }
+
+  /* ── Spec table ── */
+  .spec-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 16px;
+    font-size: 0.85rem;
+  }
+
+  .spec-table th {
+    text-align: left;
+    padding: 10px 16px;
+    font-size: 0.7rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--text-muted);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .spec-table td {
+    padding: 14px 16px;
+    border-bottom: 1px solid var(--border);
+    vertical-align: top;
+  }
+  .spec-table tr:last-child td { border-bottom: none; }
+
+  .spec-table td:first-child {
+    font-weight: 600;
+    color: var(--accent);
+    white-space: nowrap;
+    width: 160px;
+  }
+
+  /* ── Callout ── */
+  .callout {
+    display: flex;
+    gap: 14px;
+    align-items: flex-start;
+    background: rgba(255,160,80,0.07);
+    border: 1px solid rgba(255,160,80,0.2);
+    border-radius: 8px;
+    padding: 16px 18px;
+    margin-top: 16px;
+    font-size: 0.82rem;
+    color: var(--text-muted);
+  }
+  .callout-icon { font-size: 1rem; flex-shrink: 0; margin-top: 1px; }
+  .callout strong { color: var(--text); }
+
+  /* ── Ensure all text inside dark cards is readable ── */
+  .section-card, .policy-header {
+    color: var(--text);
+  }
+  .section-card strong, .policy-header strong { color: var(--text); }
+
+  /* ── Footer ── */
+  footer {
+    border-top: 1px solid var(--page-border);
+    text-align: center;
+    padding: 24px;
+    font-size: 0.75rem;
+    color: var(--page-text-muted);
+  }
+
+  @media (max-width: 640px) {
+    header { padding: 0 20px; }
+    .hero { padding: 48px 20px 40px; }
+    .tab-nav { padding: 0 20px; }
+    .content-area { padding: 0 20px 60px; }
+    .policy-header { flex-direction: column; }
+    .policy-meta { align-items: flex-start; flex-direction: row; flex-wrap: wrap; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">MORTGAGE<span>LANE</span></div>
+  <span class="header-badge">IT Policy Hub</span>
+</header>
+
+<div class="hero">
+  <div class="hero-eyebrow">Employee Resources</div>
+  <h1>Security &amp; IT Policies</h1>
+  <p>Everything you need to stay compliant and secure. Select a policy below to read the full guidance.</p>
+</div>
+
+<nav class="tab-nav">
+  <button class="tab-btn active" onclick="switchTab('mfa', this)">MFA Setup Guide</button>
+  <button class="tab-btn" onclick="switchTab('hardware', this)">Device Hardware Policy</button>
+</nav>
+
+<div class="content-area">
+
+  <!-- ══ MFA POLICY ══ -->
+  <div id="mfa" class="policy-panel active">
+    <div class="policy-header">
+      <div>
+        <h2>Setting Up MFA for Microsoft 365</h2>
+        <p>Multi-factor authentication protects your account from unauthorised access. Follow the steps below to get set up on your mobile device.</p>
+      </div>
+      <div class="policy-meta">
+        <span class="meta-tag security">Security</span>
+        <span class="meta-tag it">IT</span>
+      </div>
+    </div>
+
+    <!-- Step 1 -->
+    <div class="section-card open">
+      <div class="section-title" onclick="toggleCard(this.parentElement)">
+        <div class="step-num">1</div>
+        <h3>Install Microsoft Authenticator</h3>
+        <span class="chevron">▾</span>
+      </div>
+      <div class="section-body">
+        <p>Download the Microsoft Authenticator app on your phone before starting setup.</p>
+        <ul class="step-list">
+          <li>iPhone: search <strong>Microsoft Authenticator</strong> in the App Store</li>
+          <li>Android: search <strong>Microsoft Authenticator</strong> in the Google Play Store</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Step 2 -->
+    <div class="section-card">
+      <div class="section-title" onclick="toggleCard(this.parentElement)">
+        <div class="step-num">2</div>
+        <h3>Trigger the MFA Setup</h3>
+        <span class="chevron">▾</span>
+      </div>
+      <div class="section-body">
+        <ul class="step-list">
+          <li>Sign into your Microsoft 365 account at <strong>microsoft365.com</strong></li>
+          <li>You will be prompted to set up MFA — or navigate directly to <strong>aka.ms/mfasetup</strong></li>
+          <li>Click <strong>Next</strong> when asked to provide additional security information</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Step 3 -->
+    <div class="section-card">
+      <div class="section-title" onclick="toggleCard(this.parentElement)">
+        <div class="step-num">3</div>
+        <h3>Add Your Account in the App</h3>
+        <span class="chevron">▾</span>
+      </div>
+      <div class="section-body">
+        <ul class="step-list">
+          <li>Choose <strong>Microsoft Authenticator app</strong> as your method</li>
+          <li>On your phone, open the app, tap <strong>+</strong>, then select <strong>Work or school account</strong></li>
+          <li>Scan the QR code displayed on your computer screen</li>
+          <li>Approve the test notification sent to your phone to confirm setup</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Step 4 -->
+    <div class="section-card">
+      <div class="section-title" onclick="toggleCard(this.parentElement)">
+        <div class="step-num">4</div>
+        <h3>Set Authenticator as Your Default</h3>
+        <span class="chevron">▾</span>
+      </div>
+      <div class="section-body">
+        <p>In your Microsoft security settings, ensure Authenticator is set as your <strong>default sign-in method</strong> for the best experience.</p>
+        <div class="tip-box">Back up your Authenticator account in the app settings — this makes it easy to restore if you ever change your phone.</div>
+      </div>
+    </div>
+
+    <!-- Third-party authenticator -->
+    <div class="section-card">
+      <div class="section-title" onclick="toggleCard(this.parentElement)">
+        <div class="step-num">✦</div>
+        <h3>Using a Third-Party Authenticator App</h3>
+        <span class="chevron">▾</span>
+      </div>
+      <div class="section-body">
+        <p>If you prefer to use a third-party TOTP app such as <strong>Google Authenticator</strong>, <strong>Authy</strong>, or <strong>1Password</strong>, Microsoft 365 supports this via a one-time code (TOTP) method. Follow the steps below after completing Step 2 above.</p>
+
+        <p style="margin-top:20px; margin-bottom:4px; font-weight:600; color: var(--text);">Step A — Choose the TOTP option</p>
+        <ul class="step-list">
+          <li>At the MFA setup screen, click <strong>I want to use a different authenticator app</strong></li>
+          <li>Click <strong>Next</strong> — Microsoft will display a QR code</li>
+        </ul>
+
+        <p style="margin-top:20px; margin-bottom:4px; font-weight:600; color: var(--text);">Step B — Scan the QR code in your app</p>
+        <ul class="step-list">
+          <li>Open your chosen authenticator app on your phone</li>
+          <li>Tap <strong>+</strong> or <strong>Add account</strong> (wording varies by app)</li>
+          <li>Select <strong>Scan QR code</strong> and point your camera at the code on screen</li>
+          <li>Your Microsoft 365 account will appear in the app with a 6-digit rotating code</li>
+        </ul>
+
+        <p style="margin-top:20px; margin-bottom:4px; font-weight:600; color: var(--text);">Step C — Verify and complete setup</p>
+        <ul class="step-list">
+          <li>Microsoft will ask you to enter the 6-digit code currently shown in your app</li>
+          <li>Type the code and click <strong>Verify</strong> before it refreshes (codes rotate every 30 seconds)</li>
+          <li>Once verified, click <strong>Done</strong> — your account is now protected with MFA</li>
+        </ul>
+
+        <div class="callout" style="margin-top:20px;">
+          <span class="callout-icon">ℹ</span>
+          <span><strong>No push notifications.</strong> Third-party apps only generate TOTP codes — you will not receive one-tap push notifications like you would with the Microsoft Authenticator app. You must open the app and type the code each time you sign in.</span>
+        </div>
+        <div class="tip-box" style="margin-top:12px;">
+          If your app supports <strong>cloud backup</strong> (e.g. Authy or 1Password), enable it so you don't lose access if you change phones. Google Authenticator also supports Google Account backup — make sure it is turned on in the app settings.
+        </div>
+      </div>
+    </div>
+
+    <!-- Method comparison -->
+    <div class="section-card">
+      <div class="section-title" onclick="toggleCard(this.parentElement)">
+        <div class="step-num">✦</div>
+        <h3>MFA Method Comparison</h3>
+        <span class="chevron">▾</span>
+      </div>
+      <div class="section-body">
+        <table class="compare-table">
+          <thead>
+            <tr>
+              <th>Method</th>
+              <th>Security</th>
+              <th>Convenience</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Passkeys</td>
+              <td><span class="badge-best">Best</span></td>
+              <td>Excellent — FaceID, fingerprint or PIN</td>
+            </tr>
+            <tr>
+              <td>Microsoft Authenticator (push notification)</td>
+              <td><span class="badge-best">Best</span></td>
+              <td>One tap</td>
+            </tr>
+            <tr>
+              <td>Microsoft Authenticator (TOTP code)</td>
+              <td><span class="badge-best">Best</span></td>
+              <td>Good</td>
+            </tr>
+            <tr>
+              <td>SMS text code</td>
+              <td><span class="badge-weaker">Weaker</span></td>
+              <td>Good</td>
+            </tr>
+            <tr>
+              <td>Phone call</td>
+              <td><span class="badge-weaker">Weaker</span></td>
+              <td>OK</td>
+            </tr>
+          </tbody>
+        </table>
+        <div class="callout" style="margin-top:20px;">
+          <span class="callout-icon">⚠</span>
+          <span><strong>Avoid SMS where possible.</strong> SMS codes are vulnerable to SIM-swapping attacks and should only be used as a fallback.</span>
+        </div>
+        <div class="tip-box" style="margin-top:12px;">
+          <strong>Number matching</strong> is enabled by default in Microsoft 365 — when approving a sign-in you will enter a 2-digit number shown on your login screen, which prevents accidental approvals.
+        </div>
+        <div class="tip-box" style="margin-top:8px;">
+          <strong>Passkeys</strong> use a cryptographic key pair stored on your device and are resistant to phishing. Where supported, they offer a stronger and simpler experience than a password and authenticator combined.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ HARDWARE POLICY ══ -->
+  <div id="hardware" class="policy-panel">
+    <div class="policy-header">
+      <div>
+        <h2>Device Hardware Specification Policy</h2>
+        <p>Sets the minimum hardware standard any desktop or laptop must meet before being used for Mortgage Lane business. Applies to company-owned and personally owned work devices.</p>
+      </div>
+      <div class="policy-meta">
+        <span class="meta-tag it">IT Security</span>
+        <span class="meta-tag date">Issued 16 June 2026</span>
+      </div>
+    </div>
+
+    <!-- Purpose -->
+    <div class="section-card open">
+      <div class="section-title" onclick="toggleCard(this.parentElement)">
+        <div class="step-num">✦</div>
+        <h3>Purpose &amp; Scope</h3>
+        <span class="chevron">▾</span>
+      </div>
+      <div class="section-body">
+        <p>This policy maintains a consistent hardware baseline so that all staff devices are:</p>
+        <ul class="step-list">
+          <li>Fast enough for day-to-day mortgage and CRM applications</li>
+          <li>Capable of running a supported, fully patched operating system</li>
+          <li>Able to meet Cyber Essentials and FCA data-security obligations</li>
+        </ul>
+        <p style="margin-top:16px;">It applies to all desktop and laptop computers used to access Mortgage Lane systems, email, or customer data — including devices used for occasional or remote work. Mobile phones and tablets are governed separately.</p>
+      </div>
+    </div>
+
+    <!-- Minimum spec -->
+    <div class="section-card">
+      <div class="section-title" onclick="toggleCard(this.parentElement)">
+        <div class="step-num">✦</div>
+        <h3>Minimum Hardware Specification</h3>
+        <span class="chevron">▾</span>
+      </div>
+      <div class="section-body">
+        <p>Every desktop and laptop used for work must meet or exceed <em>all</em> of the following:</p>
+        <table class="spec-table">
+          <thead>
+            <tr>
+              <th>Component</th>
+              <th>Minimum requirement</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Operating system</td>
+              <td>A modern, vendor-supported OS (e.g. Windows 11) that receives security updates and can be enrolled in Microsoft Intune.</td>
+            </tr>
+            <tr>
+              <td>Processor (CPU)</td>
+              <td>Intel Core i3 12th generation or higher, AMD Ryzen 3 7000 series or higher, or an equivalent processor of the same class or newer.</td>
+            </tr>
+            <tr>
+              <td>Memory (RAM)</td>
+              <td>At least 8 GB.</td>
+            </tr>
+            <tr>
+              <td>Storage</td>
+              <td>At least 128 GB — solid-state drive (SSD) strongly preferred.</td>
+            </tr>
+          </tbody>
+        </table>
+        <div class="callout" style="margin-top:16px;">
+          <span class="callout-icon">ℹ</span>
+          <span>If you are unsure whether your device qualifies, <strong>check with IT before using it for work</strong>. Windows 10 reached end of support in October 2025 and is no longer compliant.</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Why -->
+    <div class="section-card">
+      <div class="section-title" onclick="toggleCard(this.parentElement)">
+        <div class="step-num">✦</div>
+        <h3>Why These Requirements?</h3>
+        <span class="chevron">▾</span>
+      </div>
+      <div class="section-body">
+        <ul class="step-list">
+          <li><strong>Supportable OS.</strong> The device must run an OS that can be enrolled in Microsoft Intune for configuration, monitoring, and remote security management.</li>
+          <li><strong>Security.</strong> A supported OS and 8 GB of RAM allows disk encryption, modern anti-malware, and management tooling to run without degrading the device — supporting Cyber Essentials and FCA data-security expectations.</li>
+          <li><strong>Performance.</strong> 8 GB RAM, a 128 GB+ SSD, and a current-generation processor keep everyday mortgage and CRM applications responsive and reduce downtime.</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Existing & new devices -->
+    <div class="section-card">
+      <div class="section-title" onclick="toggleCard(this.parentElement)">
+        <div class="step-num">✦</div>
+        <h3>Existing &amp; New Devices</h3>
+        <span class="chevron">▾</span>
+      </div>
+      <div class="section-body">
+        <ul class="step-list">
+          <li><strong>New purchases.</strong> Any new desktop or laptop bought for work must meet this specification from the point of purchase.</li>
+          <li><strong>Existing devices.</strong> Devices already in use will be checked against this standard. Any that fall short must be scheduled for replacement and should not be used to store or process customer data in the meantime.</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Exceptions -->
+    <div class="section-card">
+      <div class="section-title" onclick="toggleCard(this.parentElement)">
+        <div class="step-num">✦</div>
+        <h3>Exceptions &amp; Review</h3>
+        <span class="chevron">▾</span>
+      </div>
+      <div class="section-body">
+        <p>Any exception to this policy must be:</p>
+        <ul class="step-list">
+          <li>Approved in writing by IT or management</li>
+          <li>Recorded with a fixed review date</li>
+          <li>Accompanied by compensating controls (for example, restricted data access)</li>
+        </ul>
+        <div class="tip-box" style="margin-top:16px;">This policy is reviewed at least annually or whenever operating-system support requirements change.</div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<footer>
+  Mortgage Lane · IT Policy Hub · Internal use only
+</footer>
+
+<script>
+  function switchTab(id, btn) {
+    document.querySelectorAll('.policy-panel').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+    btn.classList.add('active');
+  }
+
+  function toggleCard(card) {
+    card.classList.toggle('open');
+  }
+</script>
+</body>
+</html>
