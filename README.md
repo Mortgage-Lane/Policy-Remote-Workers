@@ -1,1 +1,2 @@
 # Policy-Remote-Workers
+This policy sets out the requirements and responsibilities for employees working remotely. It covers acceptable use of company systems, secure access to data, equipment standards, and the expectations placed on staff working outside of a Mortgage Lane office. All remote workers must adhere to this policy to ensure the security of company and customer data and to remain compliant with our regulatory obligations.
